@@ -1,4 +1,8 @@
 import Vue from 'vue'
-import { Calendar } from 'vant'
+import { NavBar, Form, Field, Button, CountDown } from 'vant'
 
-Vue.use(Calendar)
+Vue.use(NavBar)
+Vue.use(Form)
+Vue.use(Field)
+Vue.use(Button)
+Vue.use(CountDown)
