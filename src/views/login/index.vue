@@ -83,6 +83,7 @@ export default {
         const { data: res } = await login(this.from)
 
         Toast.success('登录成功')
+        this.$router.push('/profile')
         this.$store.commit('setUser', res.data)
       } catch (err) {
         if (err.response && err.response.status === 400) {

@@ -1,18 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+// 引入本地方法
+import { getItem, setItem } from '../utils/storage'
 Vue.use(Vuex)
 
 const hmtttoken = 'HMTT-TOUKEN'
 
 export default new Vuex.Store({
   state: {
-    user: JSON.parse(localStorage.getItem(hmtttoken))
+    user: getItem(hmtttoken)
   },
   mutations: {
     setUser (state, payload) {
       state.user = payload
-      localStorage.setItem(hmtttoken, JSON.stringify(payload))
+      setItem(hmtttoken, payload)
     }
   },
   actions: {
