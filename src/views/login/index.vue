@@ -2,7 +2,13 @@
   <div class="login-container">
 <van-nav-bar
   title="登录"
-/>
+  class="van-nav-bar"
+>
+  <template #left>
+    <van-icon name="cross" color="#fff" @click="$router.go(-1)"/>
+  </template>
+</van-nav-bar>
+
 <!-- 填写手机号区域 -->
 <van-form @submit="onSubmit" ref="from">
   <van-field
@@ -80,11 +86,11 @@ export default {
     // 登录功能
     async onSubmit () {
       try {
-        const { data: res } = await login(this.from)
+        const res = await login(this.from)
 
         Toast.success('登录成功')
         this.$router.push('/profile')
-        this.$store.commit('setUser', res.data)
+        this.$store.commit('setUser', res)
       } catch (err) {
         if (err.response && err.response.status === 400) {
           return Toast.fail('亲，验证码错误或重新登录')

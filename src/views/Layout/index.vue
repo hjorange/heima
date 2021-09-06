@@ -24,7 +24,7 @@
     </template>
   </van-tabbar-item>
 <!-- 我的 -->
-  <van-tabbar-item icon="setting-o" to="/profile"><span>我的</span>
+  <van-tabbar-item icon="setting-o" to="/profile"><span>{{$store.state.user?'我的':'未登录'}}</span>
     <template #icon>
       <i class="toutiao toutiao-wode"></i>
     </template></van-tabbar-item>

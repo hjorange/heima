@@ -1,4 +1,5 @@
 import request from '@/utils/request.js'
+
 /**
  * 发送验证码的请求
  * @param {*} mobile 传入的参数
@@ -14,5 +15,15 @@ export const login = (data) => {
     url: '/app/v1_0/authorizations',
     method: 'POST',
     data
+  })
+}
+
+export const getUserInfo = () => {
+  return request({
+    url: '/app/v1_0/user',
+    method: 'GET'
+    // headers: {
+    //   Authorization: 'Bearer ' + store.state.user.token
+    // }
   })
 }
