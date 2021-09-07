@@ -15,11 +15,11 @@ const routes = [
     component: Login
   },
   {
-    path: '/layout',
+    path: '/',
     component: Layout,
     children: [
       {
-        path: '/home',
+        path: '',
         component: Home
       },
       {

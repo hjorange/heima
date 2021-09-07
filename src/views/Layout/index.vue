@@ -3,7 +3,7 @@
     <router-view/>
 <van-tabbar route>
   <!-- 首页 -->
-  <van-tabbar-item icon="home-o" to="/home">
+  <van-tabbar-item icon="home-o" to="/">
     <span>首页</span>
     <template #icon>
       <i class="toutiao toutiao-shouye"></i>
