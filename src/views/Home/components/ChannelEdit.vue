@@ -1,0 +1,158 @@
+<template>
+  <div class="channel-edit">
+    <!-- 我的频道 -->
+    <div class="my-channel channel">
+      <van-cell  :border="false" title="我的频道">
+        <template>
+          <van-button
+          color="red"
+          plain
+          round
+          size="mini"
+          @click="isEdit=!isEdit" >{{isEdit?'完成':'编辑'}}</van-button>
+        </template>
+      </van-cell>
+
+      <van-grid :gutter="10">
+        <van-grid-item
+        @click="onClickMyItem(index)"
+        v-for="(item,index) in myChannels"
+        :class="{active:index===activeIndex}"
+        :key="item.id"
+        :icon="(isEdit && index!==0)?'close':''"
+        :text="item.name" />
+      </van-grid>
+    </div>
+    <!-- 推荐频道 -->
+    <div class="re-channel channel">
+      <van-cell :border="false" title="推荐频道">
+      </van-cell>
+
+      <van-grid :gutter="10" direction="horizontal"
+      icon-size="0.32rem" >
+        <van-grid-item
+        v-for="item in recommChannels"
+        :key="item.id"
+        icon="plus"
+        :text="item.name"
+        @click="addToMyChannel(item)"
+        />
+      </van-grid>
+    </div>
+  </div>
+</template>
+
+<script>
+import { getAllList } from '@/api/chnnel.js'
+import { Toast } from 'vant'
+
+export default {
+  props: {
+    myChannels: {
+      type: Array,
+      required: true
+    },
+    activeIndex: {
+      type: Number,
+      required: true
+    }
+  },
+  data () {
+    return {
+      allChannels: [],
+      isEdit: false
+    }
+  },
+
+  created () {
+    this.loadAllChannel()
+  },
+  computed: {
+    // 判断我的频道有没有。把没有的渲染到推荐频道2
+    recommChannels () {
+      // const recommendArr = this.allChannels.filter(channelItem => {
+      //   const flag = this.myChannels.some(myItem => {
+      //     return myItem.id === channelItem.id
+      //   })
+      //   return !flag
+      // })
+      // return recommendArr
+      return this.allChannels.filter(channelItem => {
+        return !this.myChannels.some(myItem =>
+          myItem.id === channelItem.id
+        )
+      })
+    }
+  },
+  methods: {
+    // 获取全部频道列表
+    async loadAllChannel () {
+      try {
+        const { channels } = await getAllList()
+        this.allChannels = channels
+      } catch (error) {
+        Toast('系统异常')
+      }
+    },
+    // 点击推荐频道添加到我的频道
+    addToMyChannel (item) {
+      this.myChannels.push(item)
+    },
+    // 点击我的频道删除或跳转
+    onClickMyItem (index) {
+      if (this.isEdit) {
+        console.log('删除')
+      } else {
+        this.$emit('UpActive', index)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang="less">
+.channel-edit{
+  padding-top:90px ;
+  .channel{
+    /deep/.van-grid{
+      .van-grid-item__content{
+        width: 160px;
+        height: 86px;
+        background: #F4F5F6;
+        border-radius: 6px;
+        .van-grid-item__text{
+          font-size: 28px;
+          color: #222;
+        }
+      }
+        .van-grid-item__content::after{
+        border: none;
+      }
+    }
+  }
+  /deep/.van-grid-item__text{
+    margin-top: 0px;
+  }
+  /deep/.active{
+    .van-grid-item__text{
+      color: red !important;
+    }
+  }
+  .my-channel{
+    .van-cell{
+      display: flex;
+      align-items: center;
+    }
+    .van-button{
+      width: 103px;
+      height: 50px;
+    }
+    /deep/.van-grid-item__icon{
+      position: absolute;
+      font-size: 32px;
+      right: -12px;
+      top: -12px;
+    }
+  }
+}
+</style>

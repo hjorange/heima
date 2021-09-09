@@ -16,34 +16,52 @@
     <ArticleList :channelId="item.id"/>
     </van-tab>
   <template #nav-right>
-    <div class="right-btn"><i class="toutiao toutiao-gengduo"></i></div>
+    <div class="right-btn" @click="showPopup=true">
+      <i class="toutiao toutiao-gengduo"></i></div>
     <div class="place-box"></div>
   </template>
 </van-tabs>
+<van-popup
+ v-model="showPopup"
+ position="bottom"
+ closeable
+ close-icon-position="top-left"
+ :style="{ height: '80%' }">
+ <!-- 弹出层抽离 -->
+<ChannelEdit :myChannels="channels" :activeIndex="active"
+@UpActive="UpActive"/>
+ </van-popup>
+
   </div>
 </template>
 
 <script>
-import { getUserChannels } from '../../api/user.js'
+import { getUserChannels } from '@/api/user.js'
 import ArticleList from './components/ArticleList.vue'
 import { Toast } from 'vant'
+import ChannelEdit from './components/ChannelEdit.vue'
 export default {
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   name: 'home',
   data () {
     return {
-      active: 1,
+      active: 0,
+      // 弹出层的判断显示或隐藏
+      showPopup: false,
       channels: []
     }
   },
 
   created () {
+    // 调用，页面一进来就会显示数据
     this.loadUserChannels()
   },
 
   methods: {
+    // 获取导航栏数据
     async loadUserChannels () {
       try {
         const res = await getUserChannels()
@@ -51,6 +69,11 @@ export default {
       } catch (error) {
         Toast('系统异常')
       }
+    },
+    // 子传父接受值进行跳转，关闭弹出层
+    UpActive (val) {
+      this.active = val
+      this.showPopup = false
     }
   }
 }

@@ -13,15 +13,8 @@
   error-text="请求失败，点击重新加载"
   @load="onLoad"
 >
-  <van-cell v-for="item in list" :key="item.art_id" :title="item.title" value="内容" >
-  <template #label>
-    <div class="label-box">
-      <span>嘻嘻</span>
-      <span>嘻嘻</span>
-      <span>嘻嘻</span>
-    </div>
-  </template>
-</van-cell>
+<ArticleItem  v-for="item in list" :key="item.art_id" :ArticleItem="item"/>
+
 </van-list>
 </van-pull-refresh>
 
@@ -31,8 +24,11 @@
 <script>
 import { getArticleList } from '@/api/article.js'
 import { Toast } from 'vant'
+import ArticleItem from '@/components/ArticleItem.vue'
 export default {
-
+  components: {
+    ArticleItem
+  },
   data () {
     return {
       list: [],
@@ -68,7 +64,7 @@ export default {
           with_top: 1
         })
         // 加判断写人为错误，更好测试
-        if (Math.random() > 0.5) {
+        if (Math.random() > 0.2) {
           console.lg('11')
         }
 
@@ -97,7 +93,7 @@ export default {
           with_top: 1
         })
         // 加判断写人为错误，更好测试
-        if (Math.random() > 0.5) {
+        if (Math.random() > 0.2) {
           console.lg('11')
         }
 
@@ -120,12 +116,11 @@ export default {
 
 <style scoped lang="less">
 .ArticleList{
-  padding-bottom: 100px;
-  .label-box{
-  span:nth-child(2){
-    margin: 0 8px;
-  }
-}
+  // padding-bottom: 100px;
+  //让里面的y轴滚动每个单独出来，设置高度
+  height: 80vh;
+  overflow-y: scroll;
+
 }
 
 </style>
