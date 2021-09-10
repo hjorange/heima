@@ -40,6 +40,7 @@ import { getUserChannels } from '@/api/user.js'
 import ArticleList from './components/ArticleList.vue'
 import { Toast } from 'vant'
 import ChannelEdit from './components/ChannelEdit.vue'
+import { getItem } from '../../utils/storage.js'
 export default {
   components: {
     ArticleList,
@@ -64,16 +65,25 @@ export default {
     // 获取导航栏数据
     async loadUserChannels () {
       try {
-        const res = await getUserChannels()
-        this.channels = res.channels
+        // 获取存取的本地数据
+        const localChannels = getItem('HMTT-CHANNEL')
+        // 判断本地有无数据、用户有没有登录，没有数据就发送请求，获取的是默认数据，登录了还是发送请求，获取的是用户数据
+
+        if (!this.$store.state.user && localChannels) {
+          this.channels = localChannels
+        } else {
+          const res = await getUserChannels()
+          this.channels = res.channels
+        }
       } catch (error) {
         Toast('系统异常')
       }
     },
     // 子传父接受值进行跳转，关闭弹出层
-    UpActive (val) {
+    UpActive (val, isshow) {
       this.active = val
-      this.showPopup = false
+      // 传参判断弹出层是否关闭
+      this.showPopup = isshow
     }
   }
 }

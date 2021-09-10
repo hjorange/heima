@@ -15,7 +15,7 @@
 
       <van-grid :gutter="10">
         <van-grid-item
-        @click="onClickMyItem(index)"
+        @click="onClickMyItem(index,item.id)"
         v-for="(item,index) in myChannels"
         :class="{active:index===activeIndex}"
         :key="item.id"
@@ -43,9 +43,10 @@
 </template>
 
 <script>
-import { getAllList } from '@/api/chnnel.js'
+import { getAllList, addUserChannel, deleteUserChannel } from '@/api/chnnel.js'
 import { Toast } from 'vant'
-
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage.js'
 export default {
   props: {
     myChannels: {
@@ -82,7 +83,9 @@ export default {
           myItem.id === channelItem.id
         )
       })
-    }
+    },
+    // 获取vuex里面有没有存入token
+    ...mapState(['user'])
   },
   methods: {
     // 获取全部频道列表
@@ -95,15 +98,55 @@ export default {
       }
     },
     // 点击推荐频道添加到我的频道
-    addToMyChannel (item) {
+    async addToMyChannel (item) {
       this.myChannels.push(item)
+      // 有无token，判断是发请求还是存本地数据
+      if (this.user) {
+        // 发起请求持久化数据
+        try {
+          await addUserChannel({
+            id: item.id,
+            seq: this.myChannels.length
+          })
+          Toast('添加成功')
+        } catch (error) {
+          Toast('添加失败')
+        }
+      } else {
+        // 存储数据到本地
+        setItem('HMTT-CHANNEL', this.myChannels)
+      }
     },
     // 点击我的频道删除或跳转
-    onClickMyItem (index) {
+    onClickMyItem (index, id) {
       if (this.isEdit) {
-        console.log('删除')
+        // 加判断推荐不能删除
+        if (index === 0) return
+        // 加判断，否则删除高亮前面的时候，高亮会往前移一位，因为删除过后activeIndex就变了
+        if (index <= this.activeIndex) {
+          // 因为是同一事件所以共用一个事件
+          // 编辑状态下删除和高亮效果
+          this.$emit('UpActive', this.activeIndex - 1, true)
+        }
+        this.myChannels.splice(index, 1)
+        // 调用持久化数据方法
+        this.deleteStorage(id)
       } else {
-        this.$emit('UpActive', index)
+        // 完成状态下跳转和高亮效果
+        this.$emit('UpActive', index, false)
+      }
+    },
+    // 抽离删除持久化数据的方法
+    async deleteStorage (id) {
+      if (this.user) {
+        try {
+          await deleteUserChannel(id)
+          Toast.success('删除成功')
+        } catch (error) {
+          Toast.fail('删除失败')
+        }
+      } else {
+        setItem('HMTT-CHANNEL', this.myChannels)
       }
     }
   }

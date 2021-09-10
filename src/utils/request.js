@@ -2,8 +2,8 @@ import axios from 'axios'
 import { Toast } from 'vant'
 import store from '@/store'
 const request = axios.create({
-  // baseURL: 'http://toutiao-app.itheima.net'
-  baseURL: 'http://ttapi.research.itcast.cn/'
+  baseURL: 'http://toutiao-app.itheima.net'
+  // baseURL: 'http://ttapi.research.itcast.cn/app'
 })
 
 /**
@@ -12,11 +12,11 @@ const request = axios.create({
  */
 request.interceptors.request.use(config => {
   // 统一配置请求头，发送请求时多处需要用到token
-  if (config.url.indexOf('/user') !== -1) {
+  if (store.state.user) {
     config.headers.Authorization = 'Bearer ' + store.state.user.token
   }
   // 发送成功请求的操作
-  if (config.url !== '/app/v1_1/articles') {
+  if (config.url !== '/v1_1/articles') {
     Toast.loading({
       message: '加载中...',
       duration: 0, // 持续展示 toast
