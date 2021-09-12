@@ -6,7 +6,12 @@
   class="van-nav-bar"
 >
   <template #title>
-    <van-button  class="search-btn" icon="search" type="primary">按钮</van-button>
+    <van-button
+    class="search-btn"
+    icon="search"
+    type="primary"
+    to="/search"
+    >搜索</van-button>
   </template>
 </van-nav-bar>
 
