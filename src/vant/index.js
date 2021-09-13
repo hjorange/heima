@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { NavBar, Empty, Search, Form, Popup, Sticky, List, Cell, PullRefresh, CellGroup, Tab, Tabs, Field, Button, CountDown, Image as VanImage, Tabbar, TabbarItem, Grid, GridItem, Icon } from 'vant'
+import { NavBar, Empty, Search, Form, Popup, Sticky, List, Cell, PullRefresh, CellGroup, Tab, Tabs, Field, Button, CountDown, Image as VanImage, Tabbar, TabbarItem, Grid, GridItem, Icon, Loading, Divider } from 'vant'
 
 Vue.use(NavBar)
 Vue.use(Sticky)
@@ -22,3 +22,5 @@ Vue.use(PullRefresh)
 Vue.use(Popup)
 Vue.use(Search)
 Vue.use(Empty)
+Vue.use(Loading)
+Vue.use(Divider)

@@ -13,7 +13,8 @@
   error-text="请求失败，点击重新加载"
   @load="onLoad"
 >
-<ArticleItem  v-for="item in list" :key="item.art_id" :ArticleItem="item"/>
+<!-- :key="item.art_id+''"因为大数据处理之后拿到的是对象，所以需要转换成字符串，key只能是字符串和数值 -->
+<ArticleItem  v-for="item in list" :key="item.art_id+''" :ArticleItem="item"/>
 
 </van-list>
 </van-pull-refresh>

@@ -1,6 +1,6 @@
 <template>
   <div>
-<van-cell >
+<van-cell :to="'/article/'+ArticleItem.art_id">
   <!-- 下面自定义插槽 -->
   <template #label>
     <div class="lable-img" v-if="ArticleItem.cover.type===3">
