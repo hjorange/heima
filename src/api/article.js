@@ -66,3 +66,45 @@ export const getCommentList = params => {
     params
   })
 }
+
+/**
+ * 对文章点赞
+ * @param {*} target
+ * @returns
+ */
+export const getCollect = target => {
+  return request({
+    url: '/v1_0/article/likings',
+    method: 'POST',
+    data: {
+      target
+    }
+  })
+}
+/**
+ * 取消对文章点赞
+ * @param {*} target
+ * @returns
+ */
+export const removeCollect = target => {
+  return request({
+    url: '/v1_0/article/likings/' + target,
+    method: 'DELETE',
+    data: {
+      target
+    }
+  })
+}
+
+/**
+ * 发布评论
+ * @param {*} data
+ * @returns
+ */
+export const postComment = data => {
+  return request({
+    url: '/v1_0/comments',
+    method: 'POST',
+    data
+  })
+}

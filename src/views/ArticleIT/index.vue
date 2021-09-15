@@ -52,7 +52,10 @@
         ></div>
         <van-divider>正文结束</van-divider>
         <!-- 评论列表 -->
-        <Comment :source="article.art_id"/>
+        <Comment :source="article.art_id"
+        @upTatolCount="totalCount=$event"
+        :list="list"
+        @click-reply="clickReply"/>
         <!-- 评论的评论列表 -->
 
       </div>
@@ -82,31 +85,45 @@
         type="default"
         round
         size="small"
+        @click="isShowPostComment=true"
       >写评论</van-button>
       <van-icon
         name="comment-o"
-        badge="123"
+        :badge="totalCount"
         color="#777"
       />
       <!-- 抽取收藏 -->
       <Collected
       v-model="article.is_collected"
       :artId="article.art_id"/>
-      <van-icon
-        color="#777"
-        name="good-job-o"
-      />
+      <!-- 抽取点赞 -->
+      <Collect v-model="article.attitude"
+      :artId="article.art_id"/>
       <van-icon name="share" color="#777777"></van-icon>
     </div>
     <!-- /底部区域 -->
 
+    <van-popup v-model="isShowPostComment" position="bottom" >
+      <CommentPost :target="articleId"
+      @onPostSuccess="onPostSuccess"/>
+    </van-popup>
+
+    <!-- 评论回复 -->
+    <van-popup v-model="isShowPostReplyComment" position="bottom" style="height:100%">
+     <CommentReply :comment="comment"
+     v-if="isShowPostReplyComment"
+     @close-reply="isShowPostReplyComment=false"/>
+    </van-popup>
   </div>
 </template>
 
 <script>
 // 引入图片预览的方法
+import CommentPost from './components/comment-post.vue'
 import Followed from '../../components/followed.vue'
 import Collected from '../../components/collected.vue'
+import CommentReply from './components/comment.reply.vue'
+import Collect from '../../components/collect.vue'
 import { ImagePreview } from 'vant'
 import { getArticleDetail } from '@/api/article.js'
 import './github-markdown.css'
@@ -114,8 +131,11 @@ import Comment from '@/components/comment-list.vue'
 export default {
   components: {
     Followed,
+    CommentPost,
     Collected,
-    Comment
+    Comment,
+    Collect,
+    CommentReply
   },
   name: 'article',
   // 由路由传递过来的参数，id
@@ -129,7 +149,12 @@ export default {
     return {
       article: {},
       isloading: true,
-      is404: false
+      is404: false,
+      isShowPostComment: false,
+      isShowPostReplyComment: false,
+      totalCount: 0,
+      comment: {},
+      list: [] // 将子组件存放数据的list放到父组件，便于兄弟组件传值
     }
   },
 
@@ -179,6 +204,15 @@ export default {
           })
         }
       })
+    },
+    onPostSuccess (obj) {
+      // 父子传值，关闭弹出层，将数据添加到list能够一开始就渲染
+      this.isShowPostComment = false
+      this.list.unshift(obj)
+    },
+    clickReply (comment) {
+      this.isShowPostReplyComment = true
+      this.comment = comment
     }
 
   }

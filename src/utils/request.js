@@ -4,6 +4,8 @@ import store from '@/store'
 // 处理数据大404的bug,下载包json-bigint
 import JSONBig from 'json-bigint'
 
+// axios.create可以设置多个实例，如果再设置一个基准地址，就可以再写一个axios.create
+
 const request = axios.create({
   // 后台返回原始数据还未被处理阶段处理大数据转换
 
