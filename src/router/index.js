@@ -8,6 +8,7 @@ import Qa from '../views/Qa'
 import Profile from '../views/Profile'
 import Search from '../views/Search'
 import Article from '@/views/ArticleIT'
+import User from '@/views/User'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,10 @@ const routes = [
         component: Profile
       }
     ]
+  },
+  {
+    path: '/user',
+    component: User
   },
   {
     path: '/article/:articleId',

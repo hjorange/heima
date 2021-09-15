@@ -15,7 +15,7 @@
 />
 <span class="name">{{users.name}}</span>
 </div>
-<van-button type="default">编辑资料</van-button>
+<van-button type="default" to="/user">编辑资料</van-button>
 </div>
   <div class="user-data">
     <div class="data-item">

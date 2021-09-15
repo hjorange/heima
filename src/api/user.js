@@ -69,3 +69,14 @@ export const removeFollowUser = target => {
 
   })
 }
+
+/**
+ * 获取用户信息
+ * @returns promise
+ */
+export const getUserProfile = () => {
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'GET'
+  })
+}
