@@ -80,3 +80,28 @@ export const getUserProfile = () => {
     method: 'GET'
   })
 }
+
+/**
+ * 编辑用户个人资料（包含实名认证）
+ * @param {*} data
+ * @returns
+ */
+export const updataUserProfile = data => {
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data
+  })
+}
+/**
+ * 编辑用户照片资料（头像、身份证照片）
+ * @param {*} data
+ * @returns
+ */
+export const updataUserAvatar = data => {
+  return request({
+    url: '/v1_0/user/photo',
+    method: 'PATCH',
+    data
+  })
+}

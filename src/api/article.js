@@ -108,3 +108,27 @@ export const postComment = data => {
     data
   })
 }
+/**
+ * 对评论或评论回复点赞
+ * @param {*} target
+ * @returns
+ */
+export const getInLink = target => {
+  return request({
+    url: '/v1_0/comment/likings',
+    method: 'POST',
+    data: {
+      target
+    }
+  })
+}
+
+export const removeInLink = target => {
+  return request({
+    url: '/v1_0/comment/likings/' + target,
+    method: 'DELETE',
+    data: {
+      target
+    }
+  })
+}

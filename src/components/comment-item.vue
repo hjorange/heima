@@ -11,7 +11,9 @@
       <div class="user-name">{{row.aut_name}}</div>
       <van-button
         class="like-btn"
-        icon="good-job-o"
+        :icon="row.is_liking?'good-job':'good-job-o'"
+        v-model="row.is_liking"
+        @click="IsLiling()"
       >{{row.like_count||'赞'}}</van-button>
     </div>
 
@@ -30,6 +32,8 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
+import { getInLink, removeInLink } from '../api/article.js'
 export default {
   name: 'CommentItem',
   components: {},
@@ -48,7 +52,33 @@ export default {
     console.log(this.row)
   },
   mounted () {},
-  methods: {}
+  methods: {
+    async IsLiling () {
+      try {
+        if (!this.row.is_liking) {
+          const res = await getInLink(this.row.com_id + '')
+          Toast.success('点赞成功')
+          if (this.row.like_count === '赞') {
+            this.row.like_count = 0
+          }
+          this.row.like_count = this.row.like_count + 1
+          console.log(res)
+        } else {
+          const res = await removeInLink(this.row.com_id + '')
+          console.log(res)
+          if (this.row.like_count <= 0) {
+            this.row.like_count = '赞'
+          } else {
+            this.row.like_count = this.row.like_count - 1
+          }
+          Toast.success('取消点赞成功')
+        }
+        this.row.is_liking = !this.row.is_liking
+      } catch (error) {
+        Toast.fail('操作异常')
+      }
+    }
+  }
 }
 </script>
 

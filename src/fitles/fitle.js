@@ -9,3 +9,7 @@ dayjs.locale('zh-cn')
 export const fromDeta = (data) => {
   return dayjs().to(data)
 }
+
+export const fromtime = (data) => {
+  return dayjs(data).format('YYYY-MM-DD')
+}
